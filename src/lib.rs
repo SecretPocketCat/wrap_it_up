@@ -11,6 +11,7 @@ mod agent;
 mod animation;
 mod assets;
 mod audio;
+mod enemy;
 mod input;
 mod io;
 mod level;
@@ -38,6 +39,7 @@ pub fn game_plugin(app: &mut App) {
         .fn_plugin(player::player_plugin)
         .fn_plugin(time::time_plugin)
         .fn_plugin(projectile::projectile_plugin)
+        .fn_plugin(enemy::enemy_plugin)
         .fn_plugin(io::io_plugin);
 
     #[cfg(debug_assertions)]

@@ -16,7 +16,7 @@ pub(super) fn spawn_player(mut commands: Commands, textures: Res<TextureAssets>)
         .spawn(SpriteBundle {
             texture: textures.texture_bevy.clone(),
             transform: Transform::from_translation(Vec3::new(0., 0., 1.))
-                .with_scale(Vec2::splat(0.5).extend(1.)),
+                .with_scale(Vec2::splat(0.25).extend(1.)),
             ..Default::default()
         })
         .insert(Player)
