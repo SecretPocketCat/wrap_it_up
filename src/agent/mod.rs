@@ -1,18 +1,20 @@
 use bevy::{prelude::*, transform::TransformSystem};
 
-use self::agent::{move_agent, wrap_agent};
+use self::agent::{age, r#move, rotate, wrap};
 
 pub mod agent;
 
 pub fn agent_plugin(app: &mut App) {
-    app.add_system(
-        move_agent
+    app.add_systems(
+        (rotate, r#move)
+            .chain()
             .in_base_set(CoreSet::PostUpdate)
             .before(TransformSystem::TransformPropagate),
     )
+    .add_system(rotate)
     .add_system(
-        wrap_agent
-            .in_base_set(CoreSet::PostUpdate)
+        wrap.in_base_set(CoreSet::PostUpdate)
             .after(TransformSystem::TransformPropagate),
-    );
+    )
+    .add_system(age.in_base_set(CoreSet::PreUpdate));
 }

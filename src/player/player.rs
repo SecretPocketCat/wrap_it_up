@@ -1,5 +1,5 @@
 use crate::{
-    agent::agent::{Direction, Speed, Wrap},
+    agent::agent::{MovementDirection, Speed, Wrap},
     assets::textures::TextureAssets,
     input::actions::{PlayerAction, UiAction},
     time::time::{ScaledTime, ScaledTimeDelta},
@@ -20,7 +20,7 @@ pub(super) fn spawn_player(mut commands: Commands, textures: Res<TextureAssets>)
             ..Default::default()
         })
         .insert(Player)
-        .insert(Direction::default())
+        .insert(MovementDirection::default())
         .insert(Speed(400.))
         .insert(Wrap)
         .insert(InputManagerBundle::<PlayerAction> {
@@ -47,7 +47,7 @@ pub(super) fn spawn_player(mut commands: Commands, textures: Res<TextureAssets>)
 }
 
 pub(super) fn move_player(
-    mut player_q: Query<(&mut Direction, &ActionState<PlayerAction>), With<Player>>,
+    mut player_q: Query<(&mut MovementDirection, &ActionState<PlayerAction>), With<Player>>,
 ) {
     for (mut dir, actions) in &mut player_q {
         if let Some(movement) = actions.clamped_axis_pair(PlayerAction::Move) {

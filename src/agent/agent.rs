@@ -1,21 +1,24 @@
 use bevy::prelude::*;
 
-use crate::{
-    level::level::LevelSize,
-    time::time::{ScaledTime, ScaledTimeDelta},
-};
+use crate::{level::level::LevelSize, time::time::*};
 
-#[derive(Component, Deref, Default)]
-pub struct Direction(pub Vec2);
+#[derive(Component, Deref, DerefMut, Default)]
+pub struct MovementDirection(pub Vec2);
 
-#[derive(Component, Deref, Default)]
+#[derive(Component, Deref, DerefMut, Default)]
 pub struct Speed(pub f32);
+
+#[derive(Component, Deref, DerefMut, Default)]
+pub struct Rotation(pub f32);
 
 #[derive(Component)]
 pub struct Wrap;
 
-pub(super) fn move_agent(
-    mut velocity_q: Query<(&Direction, &Speed, &mut Transform)>,
+#[derive(Component, Deref, DerefMut, Default)]
+pub struct Age(pub f32);
+
+pub(super) fn r#move(
+    mut velocity_q: Query<(&MovementDirection, &Speed, &mut Transform)>,
     time: ScaledTime,
 ) {
     for (dir, speed, mut trans) in velocity_q.iter_mut() {
@@ -23,8 +26,18 @@ pub(super) fn move_agent(
     }
 }
 
+// todo: look at target?
+// pub(super) fn rotate_agent(
+//     mut velocity_q: Query<(&LookAtDirection, &Speed, &mut Transform)>,
+//     time: ScaledTime,
+// ) {
+//     for (dir, speed, mut trans) in velocity_q.iter_mut() {
+//         trans.translation += dir.extend(0.) * speed.0 * time.scaled_delta_seconds();
+//     }
+// }
+
 // todo: use global pos
-pub(super) fn wrap_agent(
+pub(super) fn wrap(
     mut wrap_q: Query<(&mut Transform, &GlobalTransform), With<Wrap>>,
     level_size: Res<LevelSize>,
 ) {
@@ -38,5 +51,17 @@ pub(super) fn wrap_agent(
         if wrap_diff.y > 0. {
             t.translation.y = -t.translation.y + wrap_diff.y * t.translation.y.signum();
         }
+    }
+}
+
+pub(super) fn rotate(mut dir_q: Query<(&mut Transform, &Rotation)>, time: ScaledTime) {
+    for (mut t, rotation) in &mut dir_q {
+        t.rotate_local_z((rotation.0 * time.scaled_delta_seconds()).to_radians());
+    }
+}
+
+pub(super) fn age(mut age_q: Query<&mut Age>, time: ScaledTime) {
+    for mut age in &mut age_q.iter_mut() {
+        age.0 += time.scaled_delta_seconds();
     }
 }
