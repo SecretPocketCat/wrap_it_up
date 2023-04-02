@@ -3,7 +3,7 @@ use std::time::Duration;
 use bevy::{prelude::*, sprite::MaterialMesh2dBundle, time::common_conditions::on_timer};
 
 use crate::{
-    agent::agent::{Age, MovementDirection, Rotation, Speed, Wrap},
+    agent::agent::{Age, DespawnParent, MovementDirection, Rotation, Speed, Wrap},
     time::time::ScaledTime,
 };
 
@@ -26,8 +26,7 @@ pub enum ProjectilePath {
     },
 }
 
-// despawn projectiles
-// add a projectile bundle
+// todo: add a projectile bundle
 pub fn test_projectile_spawning(
     mut cmd: Commands,
     mut materials: ResMut<Assets<ColorMaterial>>,
@@ -71,37 +70,22 @@ pub fn test_projectile_spawning(
     .insert(MovementDirection(Vec2::X))
     .insert(Speed(300.));
 
-    // cmd.spawn(SpatialBundle::from_transform(Transform::from_translation(
-    //     Vec3::new(-300., -200., 0.),
-    // )))
-    // .insert(MovementDirection(Vec2::X))
-    // .insert(Speed(200.))
-    // .with_children(|b| {
-    //     b.spawn(MaterialMesh2dBundle {
-    //         mesh: meshes.add(shape::Circle::new(20.).into()).into(),
-    //         material: materials.add(ColorMaterial::from(Color::YELLOW)),
-    //         ..default()
-    //     })
-    //     .insert(Projectile)
-    //     .insert(SinePath { time_scale: 3. })
-    //     .insert(MovementDirection(Vec2::ZERO))
-    //     .insert(Speed(200.))
-    //     .insert(Age::default());
-    // });
+    cmd.spawn(SpatialBundle::default())
+        .insert(Rotation(30.))
+        .with_children(|b| {
+            let e = b.parent_entity();
 
-    // cmd.spawn(SpatialBundle::default())
-    //     .insert(Rotation(30.))
-    //     .with_children(|b| {
-    //         b.spawn(MaterialMesh2dBundle {
-    //             mesh: meshes.add(shape::Circle::new(20.).into()).into(),
-    //             material: materials.add(ColorMaterial::from(Color::YELLOW)),
-    //             ..default()
-    //         })
-    //         .insert(Projectile)
-    //         .insert(MovementDirection(Vec2::X))
-    //         .insert(Speed(30.))
-    //         .insert(Age::default());
-    //     });
+            b.spawn(MaterialMesh2dBundle {
+                mesh: meshes.add(shape::Circle::new(20.).into()).into(),
+                material: materials.add(ColorMaterial::from(Color::YELLOW)),
+                ..default()
+            })
+            .insert(Projectile)
+            .insert(MovementDirection(Vec2::X))
+            .insert(Speed(30.))
+            .insert(Age::default())
+            .insert(DespawnParent(e));
+        });
 
     // cmd.spawn(SpatialBundle::default())
     //     .insert(Rotation(30.))
