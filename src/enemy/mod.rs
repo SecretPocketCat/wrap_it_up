@@ -19,27 +19,29 @@ fn setup_enemies(
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<ColorMaterial>>,
 ) {
-    cmd.spawn(MaterialMesh2dBundle {
-        mesh: meshes.add(shape::Quad::new(Vec2::splat(90.)).into()).into(),
-        material: materials.add(ColorMaterial::from(Color::RED)),
-        transform: Transform::from_translation(Vec3::new(-350., 270., 200.))
-            .with_rotation(Quat::from_rotation_z(45f32.to_radians())),
-        ..default()
-    })
-    .insert(MovementDirection::default())
-    .insert(Speed(-220.))
-    .insert(ProjectilePath::SinePath { time_scale: 0.78 })
-    .insert(Age::default())
-    .with_children(|b| {
-        b.spawn(TransformBundle::default())
-            .insert(ProjectileSpawner::new(
-                SpawnInterval::IntervalSequence {
-                    steps: vec![0.3, 0.3, 0.3, 0.3, 0.6],
-                    index: 0,
-                },
-                SpawnerType::Straight,
-                1.,
-                250.,
-            ));
-    });
+    for sign in [-1., 1.].iter() {
+        cmd.spawn(MaterialMesh2dBundle {
+            mesh: meshes.add(shape::Quad::new(Vec2::splat(90.)).into()).into(),
+            material: materials.add(ColorMaterial::from(Color::RED)),
+            transform: Transform::from_translation(Vec2::new(350., -270.).extend(0.) * *sign)
+                .with_rotation(Quat::from_rotation_z(45f32.to_radians())),
+            ..default()
+        })
+        .insert(MovementDirection::default())
+        .insert(Speed(220. * sign))
+        .insert(ProjectilePath::SinePath { time_scale: 0.78 })
+        .insert(Age::default())
+        .with_children(|b| {
+            b.spawn(TransformBundle::default())
+                .insert(ProjectileSpawner::new(
+                    SpawnInterval::IntervalSequence {
+                        steps: vec![0.3, 0.3, 0.3, 0.3, 0.6],
+                        index: 0,
+                    },
+                    SpawnerType::Straight,
+                    1.,
+                    -250. * sign,
+                ));
+        });
+    }
 }
