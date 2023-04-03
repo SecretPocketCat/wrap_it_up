@@ -11,6 +11,7 @@ pub fn projectile_spawner_plugin(app: &mut App) {
 }
 
 // todo: type variant structs
+#[derive(Clone, Copy)]
 pub enum SpawnerType {
     Straight,
     StopStart,
@@ -86,12 +87,12 @@ pub fn spawn_projectiles(
             match spawner.r#type {
                 SpawnerType::Straight => {
                     cmd_e
-                        .insert(MovementDirection(Vec2::X))
+                        .insert(MovementDirection(-Vec2::Y))
                         .insert(Speed(spawner.speed));
                 }
                 SpawnerType::StopStart => {
                     cmd_e
-                        .insert(MovementDirection(Vec2::X))
+                        .insert(MovementDirection(-Vec2::Y))
                         .insert(Speed(spawner.speed))
                         .insert(ProjectilePath::StopStart {
                             time_scale: 4.,
@@ -100,13 +101,13 @@ pub fn spawn_projectiles(
                 }
                 SpawnerType::Sine => {
                     cmd_e
-                        .insert(MovementDirection(Vec2::X))
+                        .insert(MovementDirection(-Vec2::Y))
                         .insert(Speed(spawner.speed))
                         .insert(ProjectilePath::SinePath { time_scale: 4. });
                 }
                 SpawnerType::Radial => {
                     let child = cmd_e
-                        .insert(MovementDirection(Vec2::X))
+                        .insert(MovementDirection(-Vec2::Y))
                         .insert(Speed(spawner.speed))
                         .insert(ProjectilePath::StopStart {
                             time_scale: 4.,

@@ -15,7 +15,7 @@ pub(super) fn spawn_player(mut commands: Commands, textures: Res<TextureAssets>)
     commands
         .spawn(SpriteBundle {
             texture: textures.texture_bevy.clone(),
-            transform: Transform::from_translation(Vec3::new(0., 0., 1.))
+            transform: Transform::from_translation(Vec3::new(0., -285., 1.))
                 .with_scale(Vec2::splat(0.25).extend(1.)),
             ..Default::default()
         })
@@ -51,7 +51,7 @@ pub(super) fn move_player(
 ) {
     for (mut dir, actions) in &mut player_q {
         if let Some(movement) = actions.clamped_axis_pair(PlayerAction::Move) {
-            dir.0 = movement.xy();
+            dir.0 = movement.xy() * Vec2::X;
         }
     }
 }

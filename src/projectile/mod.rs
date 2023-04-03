@@ -37,7 +37,7 @@ fn apply_projectile_path(mut dir_q: Query<(&mut MovementDirection, &ProjectilePa
                 dir.0 = *initial_direction * (age.0 * time_scale).sin().abs();
             }
             ProjectilePath::SinePath { time_scale } => {
-                dir.0 = Vec2::new(dir.x, (age.0 * time_scale).sin());
+                dir.0 = Vec2::new((age.0 * time_scale).sin(), dir.y);
             }
         }
     }

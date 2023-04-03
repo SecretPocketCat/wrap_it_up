@@ -8,7 +8,7 @@ use wrap_it_up::LevelSize;
 use wrap_it_up::GAME_NAME;
 
 fn main() {
-    let lvl_size = LevelSize(Vec2::new(800., 600.));
+    let lvl_size = LevelSize(Vec2::new(600., 800.));
 
     App::new()
         .insert_resource(Msaa::Off)
