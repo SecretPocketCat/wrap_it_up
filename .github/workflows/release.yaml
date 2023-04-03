@@ -34,7 +34,7 @@ jobs:
       - name: Install rust toolchain for Apple Silicon
         uses: actions-rs/toolchain@v1
         with:
-          toolchain: stable
+          toolchain: nightly
           target: aarch64-apple-darwin
           override: true
       - name: Build release for Apple Silicon
@@ -43,7 +43,7 @@ jobs:
       - name: Install rust toolchain for Apple x86
         uses: actions-rs/toolchain@v1
         with:
-          toolchain: stable
+          toolchain: nightly
           target: x86_64-apple-darwin
           override: true
       - name: Build release for x86 Apple
@@ -83,7 +83,7 @@ jobs:
       - name: Install rust toolchain
         uses: actions-rs/toolchain@v1
         with:
-          toolchain: stable
+          toolchain: nightly
           override: true
       - name: Install Dependencies
         run: sudo apt-get update; sudo apt-get install pkg-config libx11-dev libasound2-dev libudev-dev
@@ -119,7 +119,7 @@ jobs:
       - name: Install rust toolchain
         uses: actions-rs/toolchain@v1
         with:
-          toolchain: stable
+          toolchain: nightly
           override: true
       - name: Build release
         run: |
@@ -154,7 +154,7 @@ jobs:
       - name: Install rust toolchain
         uses: actions-rs/toolchain@v1
         with:
-          toolchain: stable
+          toolchain: nightly
           override: true
       - name: Install Dependencies
         run: sudo apt-get update; sudo apt-get install pkg-config libx11-dev libasound2-dev libudev-dev
